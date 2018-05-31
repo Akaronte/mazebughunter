@@ -8,6 +8,8 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.assets.AssetManager;
 
+import android.util.Log;
+
 public final class Utility
 {
     public static final AssetManager _assetManager = new AssetManager();
@@ -21,7 +23,8 @@ public final class Utility
         if(_assetManager.isLoaded(assetFilenamePath) ){
             _assetManager.unload(assetFilenamePath);
         } else {
-            //Gdx.app.debug(TAG, “Asset is not loaded; Nothing to unload:“ + assetFilenamePath );
+            Gdx.app.debug(TAG, "Asset is not loaded; Nothing to unload:" + assetFilenamePath );
+            Log.d("mazebughunter",assetFilenamePath );
         }
     }
     
@@ -49,11 +52,12 @@ public final class Utility
             _assetManager.load(mapFilenamePath, TiledMap.class);
             //Until we add loading screen, 
             //just block until we load the map
+            Log.d("mazebughunter", mapFilenamePath);
             _assetManager.finishLoadingAsset(mapFilenamePath);
-            //Gdx.app.debug(TAG, “Map loaded!: “ + mapFilenamePath);
+            Gdx.app.debug(TAG, "Map loaded!: " + mapFilenamePath);
         }
         else{
-            //Gdx.app.debug(TAG, “Map doesn’t exist!: “ + mapFilenamePath );
+            Gdx.app.debug(TAG, "Map doesn’t exist!: " + mapFilenamePath );
         }
     }
     public static TiledMap getMapAsset(String mapFilenamePath){
@@ -62,7 +66,7 @@ public final class Utility
         if(_assetManager.isLoaded(mapFilenamePath) ){
             map =_assetManager.get(mapFilenamePath,TiledMap.class);
         } else {
-            //Gdx.app.debug(TAG, “Map is not loaded: “ + mapFilenamePath );
+            Gdx.app.debug(TAG, "Map is not loaded: " + mapFilenamePath );
         }
         return map;
     }
