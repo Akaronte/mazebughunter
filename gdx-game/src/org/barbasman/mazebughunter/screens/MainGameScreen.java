@@ -54,7 +54,7 @@ public class MainGameScreen implements Screen
         _mapRenderer.setView(_camera);
         //Gdx.app.debug(TAG, “UnitScale value is: “ + mapRenderer.getUnitScale());
         _player = new Entity();
-        _player.init(_mapMgr.getPlayerStartUnitScaled().x,_mapMgr.getPlayerStartUnitScaled().y);
+        //_player.init(_mapMgr.getPlayerStartUnitScaled().x,_mapMgr.getPlayerStartUnitScaled().y);
         _currentPlayerSprite = _player.getFrameSprite();
         _controller = new PlayerController(_player);
         Gdx.input.setInputProcessor(_controller);
@@ -162,7 +162,7 @@ public class MainGameScreen implements Screen
                         return false;
                     }
                     _mapMgr.setClosestStartPositionFromScaledUnits(_player.getCurrentPosition());_mapMgr.loadMap(mapName);
-                    _player.init(_mapMgr.getPlayerStartUnitScaled().x,_mapMgr.getPlayerStartUnitScaled().y);
+                    //_player.init(_mapMgr.getPlayerStartUnitScaled().x,_mapMgr.getPlayerStartUnitScaled().y);
                     _mapRenderer.setMap(_mapMgr.getCurrentMap());
                     //Gdx.app.debug(TAG, “Portal Activated”);
                     return true;

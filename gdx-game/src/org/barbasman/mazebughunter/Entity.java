@@ -168,16 +168,16 @@ public class Entity
         //Look into the appropriate variable when changing position
         switch (_currentDirection) {
             case DOWN :
-                _currentFrame = _walkDownAnimation.getKeyFrame(_frameTime);
+                _currentFrame =  (TextureRegion) _walkDownAnimation.getKeyFrame(_frameTime);
                 break;
             case LEFT :
-                _currentFrame = _walkLeftAnimation.getKeyFrame(_frameTime);
+                _currentFrame = (TextureRegion) _walkLeftAnimation.getKeyFrame(_frameTime);
                 break;
             case UP :
-                _currentFrame = _walkUpAnimation.getKeyFrame(_frameTime);
+                _currentFrame = (TextureRegion) _walkUpAnimation.getKeyFrame(_frameTime);
                 break;
             case RIGHT :
-                _currentFrame = _walkRightAnimation.getKeyFrame(_frameTime);
+                _currentFrame = (TextureRegion) _walkRightAnimation.getKeyFrame(_frameTime);
                 break;
             default:
                 break;
