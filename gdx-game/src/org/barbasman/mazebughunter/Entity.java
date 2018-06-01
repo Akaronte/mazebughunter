@@ -10,17 +10,18 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
+import android.util.Log;
+
 public class Entity
 {
     private static final String TAG = Entity.class.getSimpleName();
-    private static final String _defaultSpritePath = "sprites/characters/Warrior.png;";
+    private static final String _defaultSpritePath = "sprites/characters/Warrior.png";
     private Vector2 _velocity;
     private String _entityID;
     private Direction _currentDirection = Direction.LEFT;
     private Direction _previousDirection = Direction.UP;
     private Animation _walkLeftAnimation;
     private Animation _walkRightAnimation;
-    
     private Animation _walkUpAnimation;
     private Animation _walkDownAnimation;
     private Array<TextureRegion> _walkLeftFrames;
@@ -55,6 +56,11 @@ public class Entity
         loadDefaultSprite();
         loadAllAnimations();
     }
+    
+    public void init(float x, float y){
+        setCurrentPosition(x,y);
+    }
+    
     public void update(float delta){_frameTime = (_frameTime + delta)%5; //Want to avoid overflow
         //We want the hitbox to be at the feet for a better feel
         setBoundingBoxSize(0f, 0.5f);
@@ -79,7 +85,7 @@ public class Entity
             height = FRAME_HEIGHT;
         }
         if( width == 0 || height == 0){
-            //Gdx.app.debug(TAG, “Width and Height are 0!! “ + width + “:” + height);
+            Gdx.app.debug(TAG, "Width and Height are 0!! " + width + ":" + height);
         }
         //Need to account for the unitscale, since the map coordinates will be in pixels
         float minX;
@@ -95,7 +101,10 @@ public class Entity
     }
     private void loadDefaultSprite()
     {
+       
         Texture texture = Utility.getTextureAsset(_defaultSpritePath);
+        
+        
         TextureRegion[][] textureFrames = TextureRegion.split(texture,FRAME_WIDTH, FRAME_HEIGHT);
         _frameSprite = new Sprite(textureFrames[0][0].getTexture(),0,0,FRAME_WIDTH, FRAME_HEIGHT);
         _currentFrame = textureFrames[0][0];
@@ -114,7 +123,7 @@ public class Entity
             for (int j = 0; j < 4; j++) {
                 TextureRegion region = textureFrames[i][j];
                 if( region == null ){
-                    //Gdx.app.debug(TAG, “Got null animation frame “ + i + “,” + j);
+                    Gdx.app.debug(TAG, "Got null animation frame " + i + "," + j);
                 }
                 switch(i)
                 {
@@ -154,8 +163,7 @@ public class Entity
     public Vector2 getCurrentPosition(){
         return _currentPlayerPosition;
     }
-    public void setCurrentPosition(float currentPositionX, float 
-                                   currentPositionY){
+    public void setCurrentPosition(float currentPositionX, float currentPositionY){
         _frameSprite.setX(currentPositionX);
         _frameSprite.setY(currentPositionY);
         this._currentPlayerPosition.x = currentPositionX;

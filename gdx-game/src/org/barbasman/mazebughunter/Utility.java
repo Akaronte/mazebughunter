@@ -7,6 +7,7 @@ import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.files.*;
 
 import android.util.Log;
 
@@ -18,13 +19,14 @@ public final class Utility
     
     private static InternalFileHandleResolver _filePathResolver = new InternalFileHandleResolver();
     
+    
+    
     public static void unloadAsset(String assetFilenamePath){
         // once the asset manager is done loading
         if(_assetManager.isLoaded(assetFilenamePath) ){
             _assetManager.unload(assetFilenamePath);
         } else {
             Gdx.app.debug(TAG, "Asset is not loaded; Nothing to unload:" + assetFilenamePath );
-            Log.d("mazebughunter",assetFilenamePath );
         }
     }
     
@@ -52,7 +54,6 @@ public final class Utility
             _assetManager.load(mapFilenamePath, TiledMap.class);
             //Until we add loading screen, 
             //just block until we load the map
-            Log.d("mazebughunter", mapFilenamePath);
             _assetManager.finishLoadingAsset(mapFilenamePath);
             Gdx.app.debug(TAG, "Map loaded!: " + mapFilenamePath);
         }
@@ -65,6 +66,7 @@ public final class Utility
         // once the asset manager is done loading
         if(_assetManager.isLoaded(mapFilenamePath) ){
             map =_assetManager.get(mapFilenamePath,TiledMap.class);
+            Log.d("mazebughunter", "hay mapa");
         } else {
             Gdx.app.debug(TAG, "Map is not loaded: " + mapFilenamePath );
         }
@@ -95,12 +97,16 @@ public final class Utility
 
     public static Texture getTextureAsset(String textureFilenamePath){
         Texture texture = null;
-
+        //Log.d("mazebughunter",textureFilenamePath);
         // once the asset manager is done loading
+        //texture = new Texture(Gdx.files.internal("sprites/characters/Warrior.png"));
+        //texture = new Texture(Gdx.files.internal(""+textureFilenamePath));
         if( _assetManager.isLoaded(textureFilenamePath) ){
+            //Log.d("mazebughunter", "hay textura");
             texture = _assetManager.get(textureFilenamePath,Texture.class);
         } else {
             Gdx.app.debug(TAG, "Texture is not loaded: " + textureFilenamePath );
+            Log.d("mazebughunter", "no se pudo cargar:" + textureFilenamePath );
         }
 
         return texture;
