@@ -3,14 +3,19 @@ package org.barbasman.mazebughunter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.math.*;
 import java.util.Hashtable;
 
 public class MapManager {
     
     private static final String TAG = MapManager.class.getSimpleName();
+    
+    private Camera _camera;
     //private static final String TAG = "mazebughunter";
     //All maps for the game
     private Hashtable<String,String> _mapTable;
@@ -28,12 +33,17 @@ public class MapManager {
     private Vector2 _closestPlayerStartPosition;
     private Vector2 _convertedUnits;
     private Vector2 _playerStart;
-    private TiledMap _currentMap = null;
+    private Map _currentMap = null;
     private String _currentMapName;
     private MapLayer _collisionLayer = null;
     private MapLayer _portalLayer = null;
     private MapLayer _spawnsLayer = null;
     public final static float UNIT_SCALE = 1/16f;
+    
+    
+    private boolean _mapChanged = false;
+    
+    private Entity _player;
     
     public MapManager(){
         _playerStart = new Vector2(0,0);
@@ -49,52 +59,29 @@ public class MapManager {
         _closestPlayerStartPosition = new Vector2(0,0);
         _convertedUnits = new Vector2(0,0);
     }
-    
-    public void loadMap(String mapName){
-        _playerStart.set(0,0);
-        String mapFullPath = _mapTable.get(mapName);
-        if( mapFullPath == null || mapFullPath.isEmpty() ) {
-            Gdx.app.debug(TAG, "Map is invalid");
+    public void loadMap(MapFactory.MapType mapType){
+        Map map = MapFactory.getMap(mapType);
+
+        if( map == null ){
+            Gdx.app.debug(TAG, "Map does not exist!  ");
             return;
         }
-        if( _currentMap != null ){
-            _currentMap.dispose();
-        }
-        Utility.loadMapAsset(mapFullPath);
-        if( Utility.isAssetLoaded(mapFullPath) ) {
-            _currentMap = Utility.getMapAsset(mapFullPath);
-            _currentMapName = mapName;
-            Gdx.app.debug(TAG, "Map loaded");
-        }else{
-            Gdx.app.debug(TAG, "Map not loaded");
-            return;
-        }
-        _collisionLayer = _currentMap.getLayers().get(MAP_COLLISION_LAYER);
-        if( _collisionLayer == null ){
-            Gdx.app.debug(TAG, "No collision layer!");
-        }
-        _portalLayer = _currentMap.getLayers().get(MAP_PORTAL_LAYER);
-        if( _portalLayer == null ){
-            Gdx.app.debug(TAG, "No portal layer!");
-        }
-        _spawnsLayer = _currentMap.getLayers().get(MAP_SPAWNS_LAYER);
-        if( _spawnsLayer == null ){
-            Gdx.app.debug(TAG, "No spawn layer!");
-        }else{
-            Vector2 start = _playerStartLocationTable.get(_currentMapName);
-            if( start.isZero() ){
-                setClosestStartPosition(_playerStart);
-                start = _playerStartLocationTable.get(_currentMapName);
-            }
-            _playerStart.set(start.x, start.y);
-        }
-        Gdx.app.debug(TAG, "Player Start: (" + _playerStart.x + "," + _playerStart.y + ")");
+
+
+        _currentMap = map;
+        
+        Gdx.app.debug(TAG, "Player Start: (" + _currentMap.getPlayerStart().x + "," + _currentMap.getPlayerStart().y + ")");
     }
     
-    public TiledMap getCurrentMap(){
+    public Camera getCamera(){
+        return _camera;
+    }
+    
+    
+    public Map getCurrentMap(){
         if( _currentMap == null ) {
             _currentMapName = TOWN;
-            loadMap(_currentMapName);
+         
         }
         return _currentMap;
     }
@@ -140,5 +127,40 @@ public class MapManager {
         setClosestStartPosition(_convertedUnits);
     }
     
+    public final Array<Entity> getCurrentMapEntities(){
+        return _currentMap.getMapEntities();
+    }
+    public void setPlayer(Entity entity){
+        this._player = entity;
+    }
+
+    public Entity getPlayer(){
+        return this._player;
+    }
+
+    public void setCamera(Camera camera){
+        this._camera = camera;
+    }
+
     
+
+    public boolean hasMapChanged(){
+        return _mapChanged;
+    }
+
+    public void setMapChanged(boolean hasMapChanged){
+        this._mapChanged = hasMapChanged;
+    }
+    
+    public TiledMap getCurrentTiledMap(){
+        if( _currentMap == null ) {
+            loadMap(MapFactory.MapType.TOWN);
+        }
+        return _currentMap.getCurrentTiledMap();
+    }
+    
+    
+    public void updateCurrentMapEntities(MapManager mapMgr, Batch batch, float delta){
+        _currentMap.updateMapEntities(mapMgr, batch, delta);
+    }
 }
