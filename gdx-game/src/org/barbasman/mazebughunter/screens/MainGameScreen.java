@@ -79,7 +79,7 @@ public class MainGameScreen implements Screen {
         _camera = new OrthographicCamera();
         _camera.setToOrtho(false, VIEWPORT.viewportWidth, VIEWPORT.viewportHeight);
 
-        //_player = EntityFactory.getInstance().getEntity(EntityFactory.EntityType.PLAYER);
+        _player = EntityFactory.getInstance().getEntity(EntityFactory.EntityType.PLAYER);
         _mapMgr.setPlayer(_player);
         _mapMgr.setCamera(_camera);
 
@@ -163,7 +163,7 @@ public class MainGameScreen implements Screen {
             _mapRenderer.getBatch().end();
 
             _mapMgr.updateCurrentMapEntities(_mapMgr, _mapRenderer.getBatch(), delta);
-            //_player.update(_mapMgr, _mapRenderer.getBatch(), delta);
+            _player.update(_mapMgr, _mapRenderer.getBatch(), delta);
             //_mapMgr.updateCurrentMapEffects(_mapMgr, _mapRenderer.getBatch(), delta);
 
             _mapRenderer.getBatch().begin();
